@@ -137,7 +137,7 @@ const Home = () => {
               borderRadius: "15PX",
             }}
           >
-            <QRCodeSVG value="http://localhost:3000" />
+            <QRCodeSVG value={window.location.hostname} />
           </div>
         </div>
       )}
