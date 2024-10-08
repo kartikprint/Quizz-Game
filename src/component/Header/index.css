@@ -1,0 +1,56 @@
+.header-container {
+  display: flex;
+  flex-direction: row;
+  background-color: black;
+  height: 10vh;
+}
+.log-card {
+  text-align: left;
+  width: 100%;
+}
+.death-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  justify-content: end;
+}
+.nav-item {
+  font-size: 25px;
+  font-family: "Roboto";
+  color: red;
+  padding: 5px;
+  margin: 5px;
+  font-family: "Julee";
+  list-style: none;
+}
+.header {
+  color: red;
+  font-family: "Julee";
+  font-size: 25px;
+}
+
+@media (min-width: 768px) {
+  /*pc */
+  .header {
+    color: red;
+    font-family: "Julee";
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Mobile-specific styles */
+  .header {
+    color: red;
+    font-family: "Julee";
+    font-size: 20px;
+    text-align: left;
+  }
+
+  .death-card {
+    width: 100%;
+
+    padding: 5px;
+  }
+}

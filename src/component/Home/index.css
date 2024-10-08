@@ -1,0 +1,225 @@
+/* General Styles */
+
+.death-question-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  color: red;
+  padding: 20px;
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+}
+.mcq {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap;
+  align-content: center;
+  height: 150px;
+}
+/* Title and QR Code */
+.death-question-card h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.qr-code {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: white;
+  border-radius: 15px;
+}
+
+/* Players section */
+.players-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.players-card h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.player {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  width: 100%;
+  max-width: 400px;
+  padding: 0;
+  margin: 0;
+}
+
+.player-text {
+  font-size: 1.2rem;
+  padding: 12px;
+  border: 2px solid #d90000;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* Join Game Input */
+.join-game {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.join-game h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.enter {
+  border: 2px solid #d90000;
+  background-color: black;
+  font-size: 1rem;
+  color: red;
+  padding: 12px;
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Death question container */
+.death-question {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+}
+
+.death-question h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.death-choice {
+  background-color: black;
+  color: red;
+  margin-top: 10px;
+  border: 2px solid #d90000;
+  padding: 12px;
+  width: 100%;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  margin: 5px;
+}
+
+.death-choice:hover {
+  background-color: #d90000;
+  color: black;
+}
+
+.feedback {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+/* Completion message */
+.death-complete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.death-score {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  width: 100%;
+  max-width: 500px;
+  padding: 0;
+}
+
+.score-player {
+  padding: 12px;
+  border: 2px solid #d90000;
+  color: red;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+  .death-question-card {
+    padding: 40px;
+  }
+
+  .player-text {
+    font-size: 1.5rem;
+  }
+
+  .death-question h2 {
+    font-size: 2rem;
+  }
+
+  .death-choice {
+    font-size: 1.5rem;
+  }
+
+  .join-game h2 {
+    font-size: 1.8rem;
+  }
+
+  .enter {
+    font-size: 1.2rem;
+  }
+}
+/*mobile */
+@media (max-width: 767px) {
+  .death-question-card {
+    padding: 10px;
+    max-height: auto;
+  }
+
+  .players-card h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  .players-card {
+    padding: 10px;
+    font-size: 20px;
+  }
+  .mcq {
+    /* flex-wrap: nowrap; */
+    width: 40%;
+  }
+
+  .death-question {
+    margin-bottom: 30px;
+  }
+
+  .player-text {
+    font-size: 1rem;
+  }
+
+  .death-choice {
+    font-size: 15px;
+    padding: 10px;
+  }
+
+  .enter {
+    font-size: 1rem;
+    padding: 10px;
+  }
+}
