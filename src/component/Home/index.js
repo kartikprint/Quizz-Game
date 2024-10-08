@@ -16,46 +16,7 @@ const questionsData = [
     correctAnswer: "Kira",
     incorrectAnswers: ["L", "X-Kira", "Beyond Birthday"],
   },
-  {
-    question: "What is L's favorite food?",
-    correctAnswer: "Cake",
-    incorrectAnswers: ["Candy", "Ice cream", "Donuts"],
-  },
-  {
-    question: "What is the lifespan of a Shinigami measured in?",
-    correctAnswer: "Time units visible to Shinigami",
-    incorrectAnswers: ["Days", "Years", "Heartbeats"],
-  },
-  {
-    question: "Which character becomes the second Kira?",
-    correctAnswer: "Misa Amane",
-    incorrectAnswers: ["Teru Mikami", "Soichiro Yagami", "Naomi Misora"],
-  },
-  {
-    question: "Who succeeds L in the investigation after his death?",
-    correctAnswer: "Near",
-    incorrectAnswers: ["Mello", "Aizawa", "Takada"],
-  },
-  {
-    question: "What is the name of the notebook that can kill people?",
-    correctAnswer: "Death Note",
-    incorrectAnswers: ["Death Scroll", "Life Note", "Black Book"],
-  },
-  {
-    question: "What is Light Yagami’s father's name?",
-    correctAnswer: "Soichiro Yagami",
-    incorrectAnswers: ["Aizawa Yagami", "Hirokazu Yagami", "Touta Matsuda"],
-  },
-  {
-    question: "What is Misa Amane’s profession?",
-    correctAnswer: "Model",
-    incorrectAnswers: ["Actress", "Detective", "Student"],
-  },
-  {
-    question: "What must be written in the Death Note to kill someone?",
-    correctAnswer: "Their full name",
-    incorrectAnswers: ["Their nickname", "Their picture", "Their address"],
-  },
+  // Add more questions here...
 ];
 
 const Home = () => {
@@ -64,10 +25,10 @@ const Home = () => {
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [players, setPlayers] = useState([]);
   const [currentPlayer, setCurrentPlayer] = useState(null);
-  const [score, setScore] = useState(0); // Player's score
-  const [showScore, setShowScore] = useState(false); // To show final score
-  const [topScorers, setTopScorers] = useState([]); // Store top scorers
-  const [previousScores, setPreviousScores] = useState([]); // Store previous scores
+  const [score, setScore] = useState(0);
+  const [showScore, setShowScore] = useState(false);
+  const [topScorers, setTopScorers] = useState([]);
+  const [previousScores, setPreviousScores] = useState([]);
 
   // Current question data
   const currentQuestion = questionsData[currentQuestionIndex];
@@ -83,11 +44,10 @@ const Home = () => {
       setFeedbackMessage(
         `Incorrect. The correct answer is ${currentQuestion.correctAnswer}.`
       );
-      setScore(score);
+      setScore(score); // No increase in score on incorrect answer
     }
 
     setTimeout(() => {
-      // Move to the next question after a short delay
       if (currentQuestionIndex < questionsData.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       } else {
@@ -95,7 +55,7 @@ const Home = () => {
       }
       setPlayerAnswer("");
       setFeedbackMessage(""); // Reset feedback
-    }, 2000); // Delay before advancing
+    }, 2000);
   };
 
   // End the game and show the final score
@@ -105,18 +65,19 @@ const Home = () => {
     const newScore = { player: currentPlayer, score };
     const updatedScores = [...previousScores, newScore];
 
-    // Save scores to local storage
     localStorage.setItem("scores", JSON.stringify(updatedScores));
-    setTopScorers(updatedScores.sort((a, b) => b.score - a.score)); // Sort top scorers
+    setTopScorers(updatedScores.sort((a, b) => b.score - a.score));
   };
 
-  // Handle player joining via mobile (after scanning QR code)
+  // Handle player joining
   const handlePlayerJoin = (playerName) => {
-    setPlayers([...players, playerName]);
-    setCurrentPlayer(playerName);
+    if (playerName.trim()) {
+      setPlayers([...players, playerName]);
+      setCurrentPlayer(playerName);
+    }
   };
 
-  // Load previous scores from local storage when the component mounts
+  // Load previous scores from local storage
   useEffect(() => {
     const storedScores = localStorage.getItem("scores");
     if (storedScores) {
@@ -126,8 +87,73 @@ const Home = () => {
 
   return (
     <div className="death-question-card">
-      {/* Display QR Code for mobile players to join */}
-      {!currentPlayer && (
+      {/* Display current question and answer options once player has joined */}
+      {currentPlayer ? (
+        <>
+          {/* Display players */}
+          <div className="players-card">
+            <h2 className="player-names">Players</h2>
+            <ul className="player">
+              {players.map((player, index) => (
+                <li className="player-text" key={index}>
+                  {player}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Display current question */}
+          {!showScore && (
+            <div className="death-question">
+              <h2>Question {currentQuestionIndex + 1}</h2>
+              <p>{currentQuestion.question}</p>
+
+              {/* Display answer options */}
+              <div className="mcq">
+                {[
+                  ...currentQuestion.incorrectAnswers,
+                  currentQuestion.correctAnswer,
+                ]
+                  .sort(() => Math.random() - 0.5) // Shuffle options
+                  .map((option, index) => (
+                    <button
+                      className="death-choice"
+                      key={index}
+                      onClick={() => handleAnswerSubmit(option)}
+                      disabled={playerAnswer !== ""} // Disable after answer
+                    >
+                      {option}
+                    </button>
+                  ))}
+              </div>
+
+              {/* Display feedback message */}
+              {feedbackMessage && <p>{feedbackMessage}</p>}
+            </div>
+          )}
+
+          {/* Display final score when the game is complete */}
+          {showScore && (
+            <div className="death-complete">
+              <h2>Quiz Complete!</h2>
+              <p>
+                {currentPlayer}, your final score is: {score}
+              </p>
+
+              {/* Display top scorers */}
+              <h3>Top Scorers:</h3>
+              <ul className="death-score">
+                {topScorers.map((scorer, index) => (
+                  <li key={index} className="score-player">
+                    {scorer.player}: {scorer.score} points
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </>
+      ) : (
+        // Display QR code and join option for new players
         <div>
           <h1>Death Game</h1>
           <div
@@ -139,85 +165,19 @@ const Home = () => {
           >
             <QRCodeSVG value={window.location.hostname} />
           </div>
-        </div>
-      )}
 
-      {/* Display players */}
-      <div className="players-card">
-        <h2 className="player-names">Players</h2>
-        <ul className="player">
-          {players.map((player, index) => (
-            <li className="player-text" key={index}>
-              {player}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Display current question */}
-      {currentPlayer && !showScore && (
-        <div className="death-question">
-          <h2>Question {currentQuestionIndex + 1}</h2>
-          <p>{currentQuestion.question}</p>
-
-          {/* Display answer options */}
-          <div className="mcq">
-            {[
-              ...currentQuestion.incorrectAnswers,
-              currentQuestion.correctAnswer,
-            ]
-              .sort() // Shuffle options randomly
-              .map((option, index) => (
-                <button
-                  className="death-choice"
-                  key={index}
-                  onClick={() => handleAnswerSubmit(option)}
-                  disabled={playerAnswer !== ""} // Disable buttons after answer is selected
-                >
-                  {option}
-                </button>
-              ))}
+          {/* Player join input */}
+          <div className="join-game">
+            <h2>Enter Your Name to Join</h2>
+            <input
+              className="enter"
+              type="text"
+              placeholder="Your name"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handlePlayerJoin(e.target.value);
+              }}
+            />
           </div>
-
-          {/* Display feedback message */}
-          {feedbackMessage && <p>{feedbackMessage}</p>}
-        </div>
-      )}
-
-      {/* Display final score when the game is complete */}
-      {showScore && (
-        <div className="death-complete">
-          <h2>Quiz Complete!</h2>
-          <p>
-            {currentPlayer}, your final score is: {score}
-          </p>
-
-          {/* Display top scorers */}
-          <h3>Top Scorers:</h3>
-          <ul className="death-score">
-            {topScorers.map((scorer, index) => (
-              <li key={index} className="score-player">
-                {scorer.player}: {scorer.score} points
-              </li>
-            ))}
-          </ul>
-
-          {/* Display previous scores */}
-        </div>
-      )}
-
-      {/* Allow players to join by entering their name */}
-      {!currentPlayer && (
-        <div className="join-game">
-          <h2>Enter Your Name to Join</h2>
-          <input
-            className="enter"
-            type="text"
-            placeholder="Your name"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handlePlayerJoin(e.target.value);
-            }}
-          />
         </div>
       )}
     </div>
